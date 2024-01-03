@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MusicBoxServer.Middleware;
@@ -44,8 +45,12 @@ var app = builder.Build();
 // 自定义中间件
 app.UseMiddleware<JwtMiddleware>();
 
+var provider = new FileExtensionContentTypeProvider();
+provider.Mappings[".flac"] = "audio/flac";
+
 app.UseStaticFiles(new StaticFileOptions
 {
+    ContentTypeProvider = provider,
     FileProvider = new PhysicalFileProvider(builder.Configuration["ExternalPath"].ToString()),
     RequestPath = "/external"
 });

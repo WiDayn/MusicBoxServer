@@ -21,7 +21,7 @@ namespace MusicBoxServer.Middleware
         public async Task Invoke(HttpContext context)
         {
             var _secret = _configuration["JwtSettings:Secret"];
-            if (context.Request.Path.StartsWithSegments("/user/login") || context.Request.Path.StartsWithSegments("/user/register"))
+            if (context.Request.Path.StartsWithSegments("/user/login") || context.Request.Path.StartsWithSegments("/user/register") || context.Request.Path.StartsWithSegments("/external"))
             {
                 await _next(context);
             }
