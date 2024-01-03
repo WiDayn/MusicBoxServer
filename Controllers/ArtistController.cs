@@ -53,5 +53,16 @@ namespace MusicBoxServer.Controllers
             await _artistService.DeleteArtistAsync(id);
             return response.NoContent();
         }
+
+        [HttpGet("{artistId}/details")]
+        public async Task<IActionResult> GetArtistDetails(int artistId)
+        {
+            var artistDetails = await _artistService.GetArtistDetailsByIdAsync(artistId);
+            if (artistDetails == null || artistDetails.Artist == null)
+            {
+                return NotFound();
+            }
+            return Ok(artistDetails);
+        }
     }
 }

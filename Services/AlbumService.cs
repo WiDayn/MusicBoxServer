@@ -1,4 +1,5 @@
-﻿using MusicBoxServer.Models;
+﻿using MusicBoxServer.Dtos;
+using MusicBoxServer.Models;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Data;
@@ -160,7 +161,7 @@ namespace MusicBoxServer.Services
                                 Title = reader.GetString("Title"),
                                 ReleaseDate = reader.GetDateTime("ReleaseDate"),
                                 CoverImagePath = reader.GetString("CoverImagePath"),
-                                Bio = reader.GetString("Bio"),
+                                Bio = reader.IsDBNull(reader.GetOrdinal("Bio")) ? "" : reader.GetString("Bio"),
                                 Distributor = reader.GetString("Distributor")
                             };
                             albumDetails.ArtistName = reader.GetString("ArtistName");

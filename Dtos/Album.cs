@@ -8,9 +8,6 @@ namespace MusicBoxServer.Dtos
         public List<Song> Songs { get; set; }
         public string ArtistName { get; set; }
 
-        public AlbumDetails()
-        {
-            Songs = new List<Song>();
-        }
+        public AlbumDetails() => Songs = new List<Song>();
     }
 }

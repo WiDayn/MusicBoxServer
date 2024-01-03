@@ -1,5 +1,4 @@
-﻿using MusicBoxServer.Dto;
-using MusicBoxServer.Dtos;
+﻿using MusicBoxServer.Dtos;
 using MusicBoxServer.Utils;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Cms;

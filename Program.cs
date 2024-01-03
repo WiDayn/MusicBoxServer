@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using MusicBoxServer.Dto;
 using MusicBoxServer.Middleware;
 using MusicBoxServer.Models;
 using MusicBoxServer.Services;

@@ -24,10 +24,10 @@ namespace MusicBoxServer.Controllers
             return response.Success(albums);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{albumId}")]
+        public async Task<IActionResult> GetById(int albumId)
         {
-            var album = await _albumService.GetAlbumByIdAsync(id);
+            var album = await _albumService.GetAlbumByIdAsync(albumId);
             if (album == null)
             {
                 return response.NotFound();
@@ -42,10 +42,10 @@ namespace MusicBoxServer.Controllers
             return response.CreatedResponse(new { album.AlbumID, album });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Album album)
+        [HttpPut("{albumId}")]
+        public async Task<IActionResult> Update(int albumId, [FromBody] Album album)
         {
-            if (id != album.AlbumID)
+            if (albumId != album.AlbumID)
             {
                 return response.BadRequest();
             }
@@ -54,12 +54,22 @@ namespace MusicBoxServer.Controllers
             return response.NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{albumId}")]
+        public async Task<IActionResult> Delete(int albumId)
         {
-            await _albumService.DeleteAlbumAsync(id);
+            await _albumService.DeleteAlbumAsync(albumId);
             return response.NoContent();
         }
 
+        [HttpGet("{albumId}/details")]
+        public async Task<IActionResult> GetAlbumDetails(int albumId)
+        {
+            var albumDetails = await _albumService.GetAlbumDetailsByIdAsync(albumId);
+            if (albumDetails == null || albumDetails.Album == null)
+            {
+                return NotFound();
+            }
+            return Ok(albumDetails);
+        }
     }
 }
