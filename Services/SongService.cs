@@ -38,7 +38,6 @@ namespace MusicBoxServer.Services
                             Title = reader.GetString("Title"),
                             AlbumID = reader.GetInt32("AlbumID"),
                             Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
-                            FilePath = reader.GetString("FilePath"),
                             Genre = reader.GetString("Genre"),
                             BitRate = reader.GetInt32("BitRate"),
                             ViewCount = reader.GetInt32("ViewCount")
@@ -70,7 +69,6 @@ namespace MusicBoxServer.Services
                             Title = reader.GetString("Title"),
                             AlbumID = reader.GetInt32("AlbumID"),
                             Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
-                            FilePath = reader.GetString("FilePath"),
                             Genre = reader.GetString("Genre"),
                             BitRate = reader.GetInt32("BitRate"),
                             ViewCount = reader.GetInt32("ViewCount")
@@ -87,11 +85,10 @@ namespace MusicBoxServer.Services
             using (var conn = GetConnection())
             {
                 await conn.OpenAsync();
-                var command = new MySqlCommand("INSERT INTO songs (Title, AlbumID, Duration, FilePath, Genre, BitRate, ViewCount) VALUES (@Title, @AlbumID, @Duration, @FilePath, @Genre, @BitRate, @ViewCount)", conn);
+                var command = new MySqlCommand("INSERT INTO songs (Title, AlbumID, Duration, FilePath, Genre, BitRate, ViewCount) VALUES (@Title, @AlbumID, @Duration, @Genre, @BitRate, @ViewCount)", conn);
                 command.Parameters.AddWithValue("@Title", song.Title);
                 command.Parameters.AddWithValue("@AlbumID", song.AlbumID);
                 command.Parameters.AddWithValue("@Duration", song.Duration.TotalSeconds);
-                command.Parameters.AddWithValue("@FilePath", song.FilePath);
                 command.Parameters.AddWithValue("@Genre", song.Genre);
                 command.Parameters.AddWithValue("@BitRate", song.BitRate);
                 command.Parameters.AddWithValue("@ViewCount", song.ViewCount);
@@ -105,12 +102,11 @@ namespace MusicBoxServer.Services
             using (var conn = GetConnection())
             {
                 await conn.OpenAsync();
-                var command = new MySqlCommand("UPDATE songs SET Title = @Title, AlbumID = @AlbumID, Duration = @Duration, FilePath = @FilePath, Genre = @Genre, BitRate = @BitRate, ViewCount = @ViewCount WHERE SongID = @SongID", conn);
+                var command = new MySqlCommand("UPDATE songs SET Title = @Title, AlbumID = @AlbumID, Duration = @Duration, Genre = @Genre, BitRate = @BitRate, ViewCount = @ViewCount WHERE SongID = @SongID", conn);
                 command.Parameters.AddWithValue("@SongID", song.SongID);
                 command.Parameters.AddWithValue("@Title", song.Title);
                 command.Parameters.AddWithValue("@AlbumID", song.AlbumID);
                 command.Parameters.AddWithValue("@Duration", song.Duration.TotalSeconds);
-                command.Parameters.AddWithValue("@FilePath", song.FilePath);
                 command.Parameters.AddWithValue("@Genre", song.Genre);
                 command.Parameters.AddWithValue("@BitRate", song.BitRate);
                 command.Parameters.AddWithValue("@ViewCount", song.ViewCount);

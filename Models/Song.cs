@@ -6,7 +6,6 @@
         public string Title { get; set; }
         public int AlbumID { get; set; }
         public TimeSpan Duration { get; set; }
-        public string FilePath { get; set; }
         public string Genre { get; set; }
         public int BitRate { get; set; }
         public int ViewCount { get; set; }

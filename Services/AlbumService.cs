@@ -40,7 +40,6 @@ namespace MusicBoxServer.Services
                             ArtistID = reader.GetInt32("ArtistID"),
                             Bio = reader.GetString("Bio"),
                             ReleaseDate = reader.GetDateTime("ReleaseDate"),
-                            CoverImagePath = reader.GetString("CoverImagePath"),
                             Distributor = reader.GetString("Distributor")
                         });
                     }
@@ -71,7 +70,6 @@ namespace MusicBoxServer.Services
                             ArtistID = reader.GetInt32("ArtistID"),
                             Bio = reader.GetString("Bio"),
                             ReleaseDate = reader.GetDateTime("ReleaseDate"),
-                            CoverImagePath = reader.GetString("CoverImagePath"),
                             Distributor = reader.GetString("Distributor")
                         };
                     }
@@ -86,12 +84,11 @@ namespace MusicBoxServer.Services
             using (var conn = GetConnection())
             {
                 await conn.OpenAsync();
-                var command = new MySqlCommand("INSERT INTO albums (Title, ArtistID, Bio, ReleaseDate, CoverImagePath, Distributor) VALUES (@Title, @ArtistID, @Bio, @ReleaseDate, @CoverImagePath, @Distributor)", conn);
+                var command = new MySqlCommand("INSERT INTO albums (Title, ArtistID, Bio, ReleaseDate, Distributor) VALUES (@Title, @ArtistID, @Bio, @ReleaseDate, @Distributor)", conn);
                 command.Parameters.AddWithValue("@Title", album.Title);
                 command.Parameters.AddWithValue("@ArtistID", album.ArtistID);
                 command.Parameters.AddWithValue("@Bio", album.Bio);
                 command.Parameters.AddWithValue("@ReleaseDate", album.ReleaseDate);
-                command.Parameters.AddWithValue("@CoverImagePath", album.CoverImagePath);
                 command.Parameters.AddWithValue("@Distributor", album.Distributor);
 
                 await command.ExecuteNonQueryAsync();
@@ -103,13 +100,12 @@ namespace MusicBoxServer.Services
             using (var conn = GetConnection())
             {
                 await conn.OpenAsync();
-                var command = new MySqlCommand("UPDATE albums SET Title = @Title, ArtistID = @ArtistID, Bio = @Bio, ReleaseDate = @ReleaseDate, CoverImagePath = @CoverImagePath, Distributor = @Distributor WHERE AlbumID = @AlbumID", conn);
+                var command = new MySqlCommand("UPDATE albums SET Title = @Title, ArtistID = @ArtistID, Bio = @Bio, ReleaseDate = @ReleaseDate, Distributor = @Distributor WHERE AlbumID = @AlbumID", conn);
                 command.Parameters.AddWithValue("@AlbumID", album.AlbumID);
                 command.Parameters.AddWithValue("@Title", album.Title);
                 command.Parameters.AddWithValue("@ArtistID", album.ArtistID);
                 command.Parameters.AddWithValue("@Bio", album.Bio);
                 command.Parameters.AddWithValue("@ReleaseDate", album.ReleaseDate);
-                command.Parameters.AddWithValue("@CoverImagePath", album.CoverImagePath);
                 command.Parameters.AddWithValue("@Distributor", album.Distributor);
 
                 await command.ExecuteNonQueryAsync();
@@ -136,8 +132,8 @@ namespace MusicBoxServer.Services
                 await conn.OpenAsync();
                 var command = new MySqlCommand(@"
             SELECT 
-                a.AlbumID, a.Title, a.ReleaseDate, a.CoverImagePath, a.Bio, a.Distributor,
-                s.SongID, s.Title AS SongTitle, s.Duration, s.FilePath, s.Genre, s.BitRate, s.ViewCount,
+                a.AlbumID, a.Title, a.ReleaseDate, a.Bio, a.Distributor,
+                s.SongID, s.Title AS SongTitle, s.Duration, s.Genre, s.BitRate, s.ViewCount,
                 ar.Name AS ArtistName
             FROM 
                 albums a
@@ -160,9 +156,8 @@ namespace MusicBoxServer.Services
                                 AlbumID = reader.GetInt32("AlbumID"),
                                 Title = reader.GetString("Title"),
                                 ReleaseDate = reader.GetDateTime("ReleaseDate"),
-                                CoverImagePath = reader.GetString("CoverImagePath"),
                                 Bio = reader.IsDBNull(reader.GetOrdinal("Bio")) ? "" : reader.GetString("Bio"),
-                                Distributor = reader.GetString("Distributor")
+                                Distributor = reader.IsDBNull(reader.GetOrdinal("Distributor")) ? "" : reader.GetString("Distributor"),
                             };
                             albumDetails.ArtistName = reader.GetString("ArtistName");
                         }
@@ -174,7 +169,6 @@ namespace MusicBoxServer.Services
                                 SongID = reader.GetInt32("SongID"),
                                 Title = reader.GetString("SongTitle"),
                                 Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
-                                FilePath = reader.GetString("FilePath"),
                                 Genre = reader.GetString("Genre"),
                                 BitRate = reader.GetInt32("BitRate"),
                                 ViewCount = reader.GetInt32("ViewCount")

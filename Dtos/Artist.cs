@@ -10,8 +10,8 @@ namespace MusicBoxServer.Dtos
 
         public ArtistDetails()
         {
-            Albums = new List<Album>();
-            TopSongs = new List<Song>();
+            Albums = [];
+            TopSongs = [];
         }
     }
 }

@@ -130,7 +130,7 @@ namespace MusicBoxServer.Services
                 var command = new MySqlCommand(@"
             SELECT 
                 pl.PlayListID, pl.UserID, pl.Name, pl.Description, pl.DateCreated,
-                s.SongID, s.Title, s.AlbumID, s.Duration, s.FilePath, s.Genre, s.BitRate, s.ViewCount,
+                s.SongID, s.Title, s.AlbumID, s.Duration, s.Genre, s.BitRate, s.ViewCount,
                 u.Username
             FROM 
                 playlists pl
@@ -171,7 +171,6 @@ namespace MusicBoxServer.Services
                                 Title = reader.GetString("Title"),
                                 AlbumID = reader.GetInt32("AlbumID"),
                                 Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
-                                FilePath = reader.GetString("FilePath"),
                                 Genre = reader.GetString("Genre"),
                                 BitRate = reader.GetInt32("BitRate"),
                                 ViewCount = reader.GetInt32("ViewCount")

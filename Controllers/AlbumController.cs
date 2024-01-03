@@ -30,7 +30,7 @@ namespace MusicBoxServer.Controllers
             var album = await _albumService.GetAlbumByIdAsync(albumId);
             if (album == null)
             {
-                return response.NotFound();
+                return response.NotFoundResponse();
             }
             return response.Success(album);
         }
@@ -51,14 +51,14 @@ namespace MusicBoxServer.Controllers
             }
 
             await _albumService.UpdateAlbumAsync(album);
-            return response.NoContent();
+            return response.NoContentResponse();
         }
 
         [HttpDelete("{albumId}")]
         public async Task<IActionResult> Delete(int albumId)
         {
             await _albumService.DeleteAlbumAsync(albumId);
-            return response.NoContent();
+            return response.NoContentResponse();
         }
 
         [HttpGet("{albumId}/details")]
@@ -67,9 +67,9 @@ namespace MusicBoxServer.Controllers
             var albumDetails = await _albumService.GetAlbumDetailsByIdAsync(albumId);
             if (albumDetails == null || albumDetails.Album == null)
             {
-                return NotFound();
+                return response.NotFoundResponse();
             }
-            return Ok(albumDetails);
+            return response.Success(albumDetails);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace MusicBoxServer.Controllers
             var playlist = await _playlistService.GetPlayListByIdAsync(playlistId);
             if (playlist == null)
             {
-                return response.NotFound();
+                return response.NotFoundResponse();
             }
             return response.Success(playlist);
         }
@@ -51,23 +51,23 @@ namespace MusicBoxServer.Controllers
             }
 
             await _playlistService.UpdatePlayListAsync(playlist);
-            return response.NoContent();
+            return response.NoContentResponse();
         }
 
         [HttpDelete("{playlistId}")]
         public async Task<IActionResult> Delete(int playlistId)
         {
             await _playlistService.DeletePlayListAsync(playlistId);
-            return response.NoContent();
+            return response.NoContentResponse();
         }
 
-        [HttpGet("{playlistId}/detail")]
+        [HttpGet("{playlistId}/details")]
         public async Task<IActionResult> GetPlayListDetails(int playlistId)
         {
             var playlistDetails = await _playlistService.GetPlayListDetailsByIdAsync(playlistId);
             if (playlistDetails == null || playlistDetails.PlayList == null)
             {
-                return response.NotFound();
+                return response.NotFoundResponse();
             }
             return response.Success(playlistDetails);
         }

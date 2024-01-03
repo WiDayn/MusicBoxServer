@@ -144,7 +144,7 @@ namespace MusicBoxServer.Services
                 var artistAndAlbumsQuery = @"
             SELECT 
                 ar.ArtistID, ar.Name, ar.Bio, ar.DateOfBirth, ar.INSLink, ar.FacebookLink, ar.TwitterLink, ar.ListenerNum,
-                a.AlbumID, a.Title, a.ReleaseDate, a.CoverImagePath, a.Bio, a.Distributor
+                a.AlbumID, a.Title, a.ReleaseDate, a.Bio, a.Distributor
             FROM 
                 artists ar
             LEFT JOIN 
@@ -181,7 +181,6 @@ namespace MusicBoxServer.Services
                                 AlbumID = reader.GetInt32("AlbumID"),
                                 Title = reader.GetString("Title"),
                                 ReleaseDate = reader.GetDateTime("ReleaseDate"),
-                                CoverImagePath = reader.GetString("CoverImagePath"),
                                 Bio = reader.IsDBNull(reader.GetOrdinal("Bio")) ? "" : reader.GetString("Bio"),
                                 Distributor = reader.IsDBNull(reader.GetOrdinal("Distributor")) ? "" : reader.GetString("Distributor"),
                                 ArtistID = artistDetails.Artist.ArtistID
@@ -194,7 +193,7 @@ namespace MusicBoxServer.Services
                 // 获取浏览量最高的前10首歌曲
                 var topSongsQuery = @"
             SELECT 
-                s.SongID, s.Title, s.Duration, s.FilePath, s.Genre, s.BitRate, s.ViewCount
+                s.SongID, s.Title, s.AlbumID, s.Duration, s.Genre, s.BitRate, s.ViewCount
             FROM 
                 songs s
             JOIN 
@@ -214,7 +213,13 @@ namespace MusicBoxServer.Services
                     {
                         var song = new Song
                         {
-                            // 设置 Song 的属性
+                            SongID = reader.GetInt32("SongID"),
+                            Title = reader.GetString("Title"),
+                            AlbumID = reader.GetInt32("AlbumID"),
+                            Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
+                            Genre = reader.GetString("Genre"),
+                            BitRate = reader.GetInt32("BitRate"),
+                            ViewCount = reader.GetInt32("ViewCount")
                         };
                         artistDetails.TopSongs.Add(song);
                     }

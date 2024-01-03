@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MusicBoxServer.Middleware;
 using MusicBoxServer.Models;
@@ -43,6 +44,11 @@ var app = builder.Build();
 // 自定义中间件
 app.UseMiddleware<JwtMiddleware>();
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(builder.Configuration["ExternalPath"].ToString()),
+    RequestPath = "/external"
+});
 
 app.UseAuthorization();
 
