@@ -22,6 +22,7 @@
         public string Area { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime LastLogin { get; set; }
+        public int FavoriteSongNum { get; set; }
         // 可以根据需要添加更多字段
     }
 }

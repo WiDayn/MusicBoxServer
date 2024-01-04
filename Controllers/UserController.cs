@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicBoxServer.Dtos;
+using MusicBoxServer.Models;
 using MusicBoxServer.Services;
 using MusicBoxServer.Utils;
 
@@ -56,19 +57,26 @@ namespace MusicBoxServer.Controllers
             return response.Success("", message: "User registered successfully");
         }
 
-        [HttpGet("userinfo/{userID}")]
-        public IActionResult GetUserInfo(int userID)
+        [HttpGet("userinfo")]
+        public IActionResult GetUserInfo()
         {
-            _logger.LogInformation("Fetching info for user: {Username}", userID);
-
-            var userInfo = userService.GetUserInfo(userID);
-
-            if (userInfo == null)
+            if (HttpContext.Items.TryGetValue("UserId", out var userIdRes))
             {
-                return response.NotFound("User not found");
-            }
+                // UserId 存在，使用它
+                var userIdAsString = userIdRes.ToString();
 
-            return response.Success(userInfo);
+                _logger.LogInformation("Fetching info for user: {Username}", userIdAsString);
+                int userId = int.Parse(userIdAsString);
+                var userInfo = userService.GetUserInfo(userId);
+
+                if (userInfo == null)
+                {
+                    return response.NotFound("User not found");
+                }
+
+                return response.Success(userInfo);
+            }
+            return response.Unauthorized();
         }
     }
 }

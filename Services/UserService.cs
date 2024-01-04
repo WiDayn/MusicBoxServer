@@ -110,7 +110,7 @@ namespace MusicBoxServer.Services
                 {
                     connection.Open();
 
-                    string query = "SELECT username, email, area, DateCreated, LastLogin FROM users WHERE userID = @UserID";
+                    string query = "SELECT username, email, area, DateCreated, LastLogin, FavoriteSongNum FROM users WHERE userID = @UserID";
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     cmd.Parameters.AddWithValue("@UserID", userID);
 
@@ -126,6 +126,7 @@ namespace MusicBoxServer.Services
                                 Area = reader.GetString("area"),
                                 DateCreated = reader.GetDateTime(reader.GetOrdinal("DateCreated")),
                                 LastLogin = reader.GetDateTime(reader.GetOrdinal("LastLogin")),
+                                FavoriteSongNum = reader.GetInt32(reader.GetOrdinal("FavoriteSongNum")),
                                 // 为其他字段赋值
                             };
                         }
