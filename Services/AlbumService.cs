@@ -132,8 +132,8 @@ namespace MusicBoxServer.Services
                 await conn.OpenAsync();
                 var command = new MySqlCommand(@"
             SELECT 
-                a.AlbumID, a.Title, a.ReleaseDate, a.Bio, a.Distributor,
-                s.SongID, s.Title AS SongTitle, s.Duration, s.Genre, s.BitRate, s.ViewCount,
+                a.AlbumID, a.Title, a.ReleaseDate, a.Bio, a.Distributor, a.ArtistID,
+                s.SongID, s.Title AS SongTitle, s.AlbumID, s.Duration, s.Genre, s.BitRate, s.ViewCount,
                 ar.Name AS ArtistName
             FROM 
                 albums a
@@ -158,6 +158,7 @@ namespace MusicBoxServer.Services
                                 ReleaseDate = reader.GetDateTime("ReleaseDate"),
                                 Bio = reader.IsDBNull(reader.GetOrdinal("Bio")) ? "" : reader.GetString("Bio"),
                                 Distributor = reader.IsDBNull(reader.GetOrdinal("Distributor")) ? "" : reader.GetString("Distributor"),
+                                ArtistID = reader.GetInt32("ArtistID"),
                             };
                             albumDetails.ArtistName = reader.GetString("ArtistName");
                         }
@@ -168,6 +169,7 @@ namespace MusicBoxServer.Services
                             {
                                 SongID = reader.GetInt32("SongID"),
                                 Title = reader.GetString("SongTitle"),
+                                AlbumID = reader.GetInt32("albumID"),
                                 Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
                                 Genre = reader.GetString("Genre"),
                                 BitRate = reader.GetInt32("BitRate"),

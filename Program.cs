@@ -16,6 +16,7 @@ builder.Services.AddScoped<ConcertService>();
 builder.Services.AddScoped<PlayListService>();
 builder.Services.AddScoped<SongService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<FavoriteService>();
 
 // 添加 JWT 认证服务
 var key = Encoding.ASCII.GetBytes("这里放置一个足够长且复杂的密钥，至少16个字符，但是还要多加上这一句话才够16个字符"); //密钥

@@ -62,7 +62,7 @@ namespace MusicBoxServer.Controllers
             {
                 return NotFound();
             }
-            return Ok(artistDetails);
+            return response.Success(artistDetails);
         }
     }
 }
