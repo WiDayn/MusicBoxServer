@@ -1,4 +1,5 @@
-﻿using MusicBoxServer.Models;
+﻿using MusicBoxServer.Dtos;
+using MusicBoxServer.Models;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Data;
@@ -126,5 +127,68 @@ namespace MusicBoxServer.Services
             }
         }
 
+        public async Task<string> GetLyricsAsync(int songId)
+        {
+            using (var connection = GetConnection())
+            {
+                await connection.OpenAsync();
+
+                var command = new MySqlCommand("SELECT Lyrics FROM songs WHERE SongID = @songId", connection);
+                command.Parameters.AddWithValue("@songId", songId);
+
+                var lyrics = await command.ExecuteScalarAsync() as string;
+                return lyrics ?? string.Empty;
+            }
+        }
+
+        public async Task<List<SearchSong>> SearchSongsAsync(string keyword)
+        {
+            var songs = new List<SearchSong>();
+
+            using (var conn = GetConnection())
+            {
+                await conn.OpenAsync();
+                var command = new MySqlCommand(@"
+            SELECT 
+                s.SongID, s.Title, s.AlbumID, s.Duration, s.Genre, s.Bitrate, s.ViewCount, s.TrackNumber,
+                a.Title AS AlbumTitle, ar.Name AS ArtistName, ar.ArtistID
+            FROM 
+                songs s
+            LEFT JOIN 
+                albums a ON s.AlbumID = a.AlbumID
+            LEFT JOIN 
+                artists ar ON a.ArtistID = ar.ArtistID
+            WHERE 
+                s.Title LIKE @Keyword OR 
+                a.Title LIKE @Keyword OR 
+                ar.Name LIKE @Keyword", conn);
+
+                command.Parameters.AddWithValue("@Keyword", $"%{keyword}%");
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var song = new SearchSong
+                        {
+                            SongID = reader.GetInt32("SongID"),
+                            Title = reader.GetString("Title"),
+                            AlbumID = reader.GetInt32("AlbumID"),
+                            ArtistID = reader.GetInt32("ArtistID"),
+                            Duration = TimeSpan.FromSeconds(reader.GetInt32("Duration")),
+                            Genre = reader.GetString("Genre"),
+                            BitRate = reader.GetInt32("Bitrate"),
+                            ViewCount = reader.GetInt32("ViewCount"),
+                            TrackNumber = reader.GetInt32("TrackNumber"),
+                            AlbumTitle = reader.GetString("AlbumTitle"),
+                            ArtistName = reader.GetString("ArtistName")
+                        };
+                        songs.Add(song);
+                    }
+                }
+            }
+
+            return songs;
+        }
     }
 }

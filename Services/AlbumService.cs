@@ -184,5 +184,29 @@ namespace MusicBoxServer.Services
             return albumDetails;
         }
 
+        public async Task<List<int>> GetRecentAlbumsAsync()
+        {
+            var recentAlbums = new List<int>();
+
+            using (var conn = GetConnection())
+            {
+                await conn.OpenAsync();
+                var command = new MySqlCommand(@"SELECT AlbumID FROM albums ORDER BY CreateTime DESC LIMIT 20", conn);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var album = new Album
+                        {
+                            AlbumID = reader.GetInt32("AlbumID"),
+                        };
+                        recentAlbums.Add(album.AlbumID);
+                    }
+                }
+            }
+
+            return recentAlbums;
+        }
     }
 }

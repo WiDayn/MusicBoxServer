@@ -60,5 +60,29 @@ namespace MusicBoxServer.Controllers
             return response.NoContent();
         }
 
+        [HttpGet("{songId}/lyrics")]
+        public async Task<IActionResult> GetLyrics(int songId)
+        {
+            var lyrics = await _songService.GetLyricsAsync(songId);
+            return response.Success(lyrics);
+        }
+
+        [HttpGet("search/{keyword}")]
+        public async Task<IActionResult> SearchSongs(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return BadRequest("Keyword is required.");
+            }
+
+            var searchResults = await _songService.SearchSongsAsync(keyword);
+            if (searchResults == null || !searchResults.Any())
+            {
+                return response.NotFoundResponse("No songs found.");
+            }
+
+            return response.Success(searchResults);
+        }
+
     }
 }

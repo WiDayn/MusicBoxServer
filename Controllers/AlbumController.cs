@@ -71,5 +71,16 @@ namespace MusicBoxServer.Controllers
             }
             return response.Success(albumDetails);
         }
+        [HttpGet("recent")]
+        public async Task<IActionResult> GetRecentAlbums()
+        {
+            var recentAlbums = await _albumService.GetRecentAlbumsAsync();
+            if (recentAlbums == null || recentAlbums.Count == 0)
+            {
+                return response.NotFoundResponse("No recent albums found.");
+            }
+            return response.Success(recentAlbums);
+        }
+
     }
 }
